@@ -92,6 +92,7 @@ class GovSpider(CrawlSpider):
         if urls:
             for url in urls:
                 
+                """
                 url = response.urljoin(url)
                 self.logger.info(url)
                 yield scrapy.Request(
@@ -99,10 +100,13 @@ class GovSpider(CrawlSpider):
                     callback=self.save_files, 
                     cb_kwargs=dict(item=item)
                 )
+                """
+                yield response.follow(url, callback=self.save_files, cb_kwargs=dict(item=item))
 
 
     def save_files(self,response,item):
 
+        self.logger.info("Saving files...")
         abpath = DATA_DIR + item['domain_collection']
         filename = md5_encode(response.url)+'.'+response.url.split('.')[-1]
 
